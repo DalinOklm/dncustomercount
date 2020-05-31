@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Assistant</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+  <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {height: 1500px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+  #user_logo
+  {
+
+  }
+
+  .user_botton_next
+  {
+    float: right;
+  }
+
+  </style>
+</head>
+<body>
+
+  <nav id="top_navbar"class="navbar navbar-inverse navbar-fixed-top">	
+    
+    <div  class="container-fluid">
+      <div class="row col-md-10 col-sm-10 col-xs-10">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#"> <strong id="User_count"> <%= total_today %> Customers in</strong> </a></li>
+          <li class="active"><a href="#"> <strong id="out_User_count" ><%= out_user %> Customers out</strong> </a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  
+
+<div class="container-fluid">
+  <div class="row content">
+
+    <div class="jumbotron">
+      <div class="container">
+        <br>
+        <br>
+        <br>
+        <h2>Customer counter</h2>
+        <h4>Power by DN Application</h4>
+        <!-- <p>Power by DN Application</p> -->
+      </div>
+    </div>
+
+
+    <!-- <div class="container">
+        <h2 id="User_count"></h2> 
+       
+    </div> -->
+    
+    <div class="container">
+    <div id="individual_user" class="col-sm-6 sidenav" style="overflow: scroll; height: 800px;">
+      
+       <!-- <h3 id="User_count"> User count </h3> -->
+       <br>
+       <br>
+
+      <div style="height: 200px; overflow: scroll;" id="inStore">
+        
+      
+        <div >
+          <div class="panel panel-info">
+           <div  class="panel-heading"><label for="question" class="muted-text"><h3 id="customer_notify" class="text-muted" >tumi vuyo  <i class="fas fa-user-tie fa-2x"></i></h3></label></div>
+            <div class="panel-body">
+          <h4 class="text-muted" >Store Manager</h4>
+          <h4 class="text-muted"> Fourway, Main road lando shopping center</h4>
+            </div>
+          </div>
+         
+        </div>
+       
+      </div>
+      
+      <hr> 
+
+
+     <div class="container"> <button id="add_user_assistant" class="btn btn-success btn-lg">Customer In</button> </div>
+<br>
+<div class="container"><button id="out_user_assistant" class="btn btn-danger btn-lg">Customer Out</button></div>
+<br>
+<br>
+      <div class="container"><button id="add_2_user_assistant" class="btn btn-success btn-lg">2 Customers In</button></div>
+      <br>
+      <div class="container"><button id="out_2_user_assistant"  class="btn btn-danger btn-lg">2 Customers Out</button></div>
+      <br>
+<br>   
+     <div class="container"> <button id="add_3_user_assistant" class="btn btn-success btn-lg">3 Customers In</button></div>
+     <br>
+      <div class="container"><button id="out_3_user_assistant"  class="btn btn-danger btn-lg">3 Customers Out</button></div>
+      <!-- <br>
+      <br>   
+           <div class="container"> <button id="add_10_user_assistant" class="btn btn-success btn-lg">10 Customers In</button></div>
+           <br>
+            <div class="container"><button id="out_10_user_assistant"  class="btn btn-danger btn-lg">10 Customers Out</button></div>
+      
+      <br>
+<br>   
+     <div class="container"> <button id="add_50_user_assistant" class="btn btn-success btn-lg">50 Customers In</button></div>
+     <br>
+      <div class="container"><button id="out_50_user_assistant"  class="btn btn-danger btn-lg">50 Customers Out</button></div>
+
+      <br>
+<br>   
+     <div class="container"> <button id="add_100_user_assistant" class="btn btn-success btn-lg">100 Customers In</button></div>
+     <br>
+      <div class="container"><button id="out_100_user_assistant"  class="btn btn-danger btn-lg">100 Customers Out</button></div> -->
+
+       <!-- end of sidenav add_5_user_assistant--> </div> 
+ 
+  
+
+    </div>
+    
+
+
+</div>
+
+
+ <!-- Footer -->
+ <footer class="page-footer font-small blue">
+  
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2020 Copyright:
+    <a>DN Application Dalinnkulu11@gmail.com</a>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+  </div>
+
+  
+
+<script>
+    
+   var socket = io('http://localhost:9000');
+
+   // add_100_user_assistant
+   var out_customer = document.getElementById("out_user_assistant")
+   var out_2_customer = document.getElementById("out_2_user_assistant")
+   var out_3_customer = document.getElementById("out_3_user_assistant")
+  //  var out_10_customer = document.getElementById("out_10_user_assistant")
+  //  var out_50_customer = document.getElementById("out_50_user_assistant")
+  //  var out_100_customer = document.getElementById("out_100_user_assistant")
+
+   var add_button = document.getElementById("add_user_assistant")
+   var add_2_button = document.getElementById("add_2_user_assistant")
+   var add_3_button = document.getElementById("add_3_user_assistant")
+  //  var add_10_button = document.getElementById("add_10_user_assistant")
+  //  var add_50_button = document.getElementById("add_50_user_assistant")
+  //  var add_100_button = document.getElementById("add_100_user_assistant")
+
+
+   out_customer.addEventListener('click', ()=>{
+
+socket.emit("customer_out", {msg: "client out", num: 1})
+})
+
+   out_2_customer.addEventListener('click', ()=>{
+
+socket.emit("customer_out", {msg: "client out", num: 2})
+})
+
+
+out_3_customer.addEventListener('click', ()=>{
+ 
+socket.emit("customer_out", {msg: "client out", num: 3})
+})
+
+// out_10_customer.addEventListener('click', ()=>{
+ 
+//  socket.emit("customer_out", {msg: "client out", num: 10})
+//  })
+
+//  out_50_customer.addEventListener('click', ()=>{
+ 
+//  socket.emit("customer_out", {msg: "client out", num: 50})
+//  })
+
+// out_100_customer.addEventListener('click', ()=>{
+ 
+//  socket.emit("customer_out", {msg: "client out", num: 100})
+//  })
+
+
+
+
+  
+
+
+    
+   add_button.addEventListener('click', ()=>{
+
+socket.emit("assistant",{msg: "assistant", num: 1})
+//socket.emit("add_this_user", {msg: "client want to add", num: 1})
+})
+
+
+add_2_button.addEventListener('click', ()=>{
+
+  socket.emit("assistant",{msg: "assistant", num: 2})
+   // socket.emit("add_this_user", {msg: "client want to add", num: 2})
+    })
+
+
+
+      add_3_button.addEventListener('click', ()=>{
+
+        socket.emit("assistant",{msg: "assistant", num: 3})
+   // socket.emit("add_this_user", {msg: "client want to add", num: 3})
+    })
+
+
+    
+//     add_10_button.addEventListener('click', ()=>{
+
+// socket.emit("assistant",{msg: "assistant", num: 10})
+// //socket.emit("add_this_user", {msg: "client want to add", num: 100})
+// })
+
+// add_50_button.addEventListener('click', ()=>{
+
+// socket.emit("assistant",{msg: "assistant", num: 50})
+// //socket.emit("add_this_user", {msg: "client want to add", num: 100})
+// })
+
+// add_100_button.addEventListener('click', ()=>{
+
+// socket.emit("assistant",{msg: "assistant", num: 100})
+// //socket.emit("add_this_user", {msg: "client want to add", num: 100})
+// })
+
+    
+
+   socket.on("updated_count", function(data){
+    console.log("updated_count event")
+    document.getElementById("User_count").innerHTML = data + " Customers in"
+    })
+
+    socket.on("out_user_updated", function(data){
+      console.log(data)
+   document.getElementById("out_User_count").innerHTML = data + " Customers out"
+    })
+
+  </script>
+  
+
+
+</body>
+</html>

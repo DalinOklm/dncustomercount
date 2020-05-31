@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Dashboard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://use.fontawesome.com/releases/v5.5.0/js/all.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+  <style>
+    /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+    .row.content {height: 1500px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+  #user_logo
+  {
+
+  }
+
+  .user_botton_next
+  {
+    float: right;
+  }
+
+
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+      transition: 0.3s;
+      width: 40%;
+    }
+
+    .card:hover {
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+
+    .container {
+      padding: 2px 16px;
+    }
+
+  </style>
+</head>
+<body>
+
+    
+  
+
+<div class="container-fluid">
+  <div class="row content">
+
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Dashboard</h1>
+        <p>Power by DN Application</p>
+      </div>
+    </div>
+
+    <br>
+    <br>
+
+    <div class="container">
+        <h1 id="user_label"><%= total %> Customers in</h1>
+        <br>
+        <!-- <button id="add_user" class="btn btn-primary btn-lg">add user</button> -->
+    </div>
+    <div class="container">
+      <h1 id="out_user_label"><%= out_user_total %> Customers out</h1>
+      <br>
+      <!-- <button id="add_user" class="btn btn-primary btn-lg">add user</button> -->
+  </div>
+    <div class="container">
+    <div id="individual_user" class="col-sm-4 sidenav" style="overflow: scroll; height: 800px;">
+      
+      <div id="inStore">
+    
+<br>
+<br>
+          <!-- <div class="well">
+            <i class="fas fa-user-tie fa-4x"></i>
+            <h3>Khumalo luto</h3>
+            <h4>Store Manager</h4>
+            <h4>Fourway, Main road lando shopping center</h4>
+          </div> -->
+
+
+          <div >
+            <div class="panel panel-info">
+             <div  class="panel-heading"><label for="question" class="muted-text"><h3 id="customer_notify" class="text-muted" >Khumalo luto  <i class="fas fa-user-tie fa-2x"></i></h3></label></div>
+              <div class="panel-body">
+            <h4 class="text-muted" >Store Manager</h4>
+            <h4 class="text-muted"> Fourway, Main road lando shopping center</h4>
+              </div>
+            </div>
+           
+          </div>
+
+          <div class="panel panel-info">
+            <div class="panel-body"><h3 id="customer_notify" class="text-muted" >Lethabo Melokuhle  <i class="fas fa-user-tie fa-2x"></i></h3></div>
+            <div class="panel-footer">
+              <h4 class="text-muted">Assitant Manager</h4>
+              <h4 class="text-muted">Fourway, Main road lando shopping center</h4>
+            </div>
+          </div>
+
+          <form action="/logout" method="POST" >
+
+            <div class="container"> <button  class="btn btn-primary ">Logout</button></div>
+
+          </form>
+
+      
+      <!-- <div  class="well well-sm">
+        <span style="float: right;" id="user_logo" ></span>
+        <h3 class="font-weight-bold">Customers 1</h3>
+     </div>
+
+     <div  class="well well-sm">
+        <span style="float: right;" id="user_logo" ></span>
+        <h3 class="font-weight-bold">Customers 2</h3>
+     </div>
+
+     <div  class="well well-sm">
+        <span style="float: right;" id="user_logo" ></span>
+        <h3 class="font-weight-bold">Customers 3</h3>
+     </div>
+
+
+     <div  class="well well-sm">
+        <span style="float: right;" id="user_logo" ></span>
+        <h3 class="font-weight-bold">Customers 4</h3>
+     </div>
+
+
+     <div  class="well well-sm">
+        <span style="float: right;" id="user_logo" ></span>
+        <h3 class="font-weight-bold">Customers 5</h3>
+     </div> -->
+
+     <!-- <button id="add_user" class="btn btn-primary btn-lg">add user</button> -->
+       
+      </div>
+      
+      <br>
+      <hr> 
+ 
+
+
+
+    <!-- end of sidenav--> </div> 
+ 
+     <div  class="col-sm-7">
+
+      <div class="container">
+        <div class="row">
+          <div style="padding: 0; margin: 0;" class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <canvas id="myBar"></canvas>
+          </div>
+        </div>
+      </div>
+   
+      <div class="container">
+        <div class="row">
+          <div style="padding: 0; margin: 0;" class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+            <canvas id="myChart"></canvas>
+          </div>
+        </div>
+
+       <div id="info_update_charts" style="display: none;" class="row">
+        <div class="panel panel-warning col-lg-4 col-md-4 col-sm-4 col-xs-6">
+          <div   class="panel-heading"><label id="info_heading_update_charts" for="question" class="muted-text">Update charts 24 new customer</div>
+           <div class="panel-body">
+            <button id="panel_button_update_charts"  class="btn btn-warning">Update charts</button>
+           </div>
+         </div>
+       </div>
+
+        <button id="update_charts" class="btn btn-primary">Update charts </button>
+
+        <button style="display: none;" id="loading_update_charts" class="btn btn-primary"><i class="fa fa-spinner fa-spin"></i>    Loading...</button>
+   
+      </div>
+
+     
+
+            <h2 id="users_inStore">Customers count</h2>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Customers <i class="fas fa-user fa-1x"></i></th>
+                  <th scope="col">time</th>
+                </tr>
+              </thead>
+
+              <!-- 8 am -->
+              <tbody id="table_user_inStore">
+               <% if (am_8_server > 0 && am_8_server <= 15) {  %>
+                
+                <tr id="am8_9am_tr" class="success" >
+                  <th scope="row">1</th>
+                  <td > <h3  id="am8_9am"><%= am_8_server %></h3> </td>
+                  <td> <h3>8am - 9am</h3> </td>
+                </tr>
+
+               <% } else if(am_8_server >= 16 && am_8_server <= 20) { %>
+
+                <tr id="am8_9am_tr"  class="warning" >
+                  <th scope="row">1</th>
+                  <td > <h3  id="am8_9am"><%= am_8_server %></h3> </td>
+                  <td> <h3>8am - 9am</h3> </td>
+                </tr>
+
+                <% } else if(am_8_server > 20) { %>
+
+                  <tr id="am8_9am_tr"  class="danger" >
+                    <th scope="row">1</th>
+                    <td > <h3  id="am8_9am"><%= am_8_server %></h3> </td>
+                    <td> <h3>8am - 9am</h3> </td>
+                  </tr>
+
+                <% } else { %>
+
+                  <tr id="am8_9am_tr"  class="active" >
+                    <th scope="row">1</th>
+                    <td > <h3  id="am8_9am"><%= am_8_server %></h3> </td>
+                    <td> <h3>8am - 9am</h3> </td>
+                  </tr>
+
+                  <% } %>
+
+              </tbody>
+
+              <!--9 am -->
+              <tbody id="table_user_inStore">
+
+                <% if (am_9_server > 0 && am_9_server <= 15) {  %>
+        
+                  <tr id="am9_10am_tr" class="success" >
+                    <th scope="row">2</th>
+                    <td > <h3  id="am9_10am"><%= am_9_server %></h3> </td>
+                    <td> <h3>9am - 10am</h3> </td>
+                  </tr>
+  
+                 <% } else if(am_9_server >= 16 && am_9_server <= 20) { %>
+  
+                  <tr id="am9_10am_tr"  class="warning" >
+                    <th scope="row">2</th>
+                    <td > <h3  id="am9_10am"><%= am_9_server %></h3> </td>
+                    <td> <h3>9am - 10am</h3> </td>
+                  </tr>
+  
+                  <% } else if(am_9_server  > 20 ) { %>
+  
+                    <tr id="am9_10am_tr"  class="danger" >
+                      <th scope="row">2</th>
+                      <td > <h3  id="am9_10am"><%= am_9_server %></h3> </td>
+                      <td> <h3>9am - 10am</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="am9_10am_tr"  class="active" >
+                      <th scope="row">2</th>
+                      <td > <h3  id="am9_10am"><%= am_9_server %></h3> </td>
+                      <td> <h3>9am - 10am</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+              </tbody>
+
+              <!--10 am-->
+              <tbody id="table_user_inStore">
+
+                <% if (am_10_server > 0 && am_10_server <= 15) {  %>
+        
+                  <tr id="am10_11am_tr" class="success" >
+                    <th scope="row">3</th>
+                    <td > <h3  id="am10_11am"><%= am_10_server %></h3> </td>
+                    <td> <h3>10am - 11am</h3> </td>
+                  </tr>
+  
+                 <% } else if(am_10_server >= 16 && am_10_server <= 20) { %>
+  
+                  <tr id="am10_11am_tr"  class="warning" >
+                    <th scope="row">3</th>
+                    <td > <h3  id="am10_11am"><%= am_10_server %></h3> </td>
+                    <td> <h3>10am - 11am</h3> </td>
+                  </tr>
+  
+                  <% } else if(am_10_server > 20) { %>
+  
+                    <tr id="am10_11am_tr"  class="danger" >
+                      <th scope="row">3</th>
+                      <td > <h3  id="am10_11am"><%= am_10_server %></h3> </td>
+                      <td> <h3>10am - 11am</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="am10_11am_tr"  class="active" >
+                      <th scope="row">3</th>
+                      <td > <h3  id="am10_11am"><%= am_10_server %></h3> </td>
+                      <td> <h3>10am - 11am</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+               
+              </tbody>
+
+              <!--11 am-->
+              <tbody id="table_user_inStore">
+
+                <% if (am_11_server > 0 && am_11_server <= 15) {  %>
+        
+                  <tr id="am11_12pm_tr" class="success" >
+                    <th scope="row">5</th>
+                    <td > <h3  id="am11_12pm"><%= am_11_server %></h3> </td>
+                    <td> <h3>11am - 12pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(am_11_server > 15 && am_11_server <= 20) { %>
+  
+                  <tr  id="am11_12pm_tr" class="warning" >
+                    <th scope="row">5</th>
+                    <td > <h3  id="am11_12pm"><%= am_11_server %></h3> </td>
+                    <td> <h3>11am - 12pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(am_11_server > 20 ) { %>
+  
+                    <tr id="am11_12pm_tr"  class="danger" >
+                      <th scope="row">5</th>
+                      <td > <h3  id="am11_12pm"><%= am_11_server %></h3> </td>
+                      <td> <h3>11am - 12pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="am11_12pm_tr"  class="active" >
+                      <th scope="row">5</th>
+                      <td > <h3  id="am11_12pm"><%= am_11_server %></h3> </td>
+                      <td> <h3>11am - 12pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+              
+              </tbody>
+
+              <!--12 pm -->
+              <tbody id="table_user_inStore">
+
+              
+                <% if (pm_12_server > 0 && pm_12_server <= 15) {  %>
+        
+                  <tr id="pm12_1pm_tr" class="success" >
+                    <th scope="row">6</th>
+                    <td > <h3  id="pm12_1pm"><%= pm_12_server %></h3> </td>
+                    <td> <h3>12pm - 1pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_12_server >= 16 && pm_12_server <= 20) { %>
+  
+                  <tr id="pm12_1pm_tr"  class="warning" >
+                    <th scope="row">6</th>
+                    <td > <h3  id="pm12_1pm"><%= pm_12_server %></h3> </td>
+                    <td> <h3>12pm - 1pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_12_server > 20) { %>
+  
+                    <tr id="pm12_1pm_tr"  class="danger" >
+                      <th scope="row">6</th>
+                      <td > <h3  id="pm12_1pm"><%= pm_12_server %></h3> </td>
+                      <td> <h3>12pm - 1pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="pm12_1pm_tr"  class="active" >
+                      <th scope="row">6</th>
+                      <td > <h3  id="pm12_1pm"><%= pm_12_server %></h3> </td>
+                      <td> <h3>12pm - 1pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+              </tbody>
+
+              <!--1 pm-->
+              <tbody id="table_user_inStore">
+
+                <% if (pm_1_server > 0 && pm_1_server <= 15) {  %>
+        
+                  <tr id="pm1_2pm_tr" class="success" >
+                    <th scope="row">7</th>
+                    <td > <h3  id="pm1_2pm"><%= pm_1_server %></h3> </td>
+                    <td> <h3>1pm - 2pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_1_server >= 16 && pm_1_server <= 20) { %>
+  
+                  <tr id="pm1_2pm_tr"  class="warning" >
+                    <th scope="row">7</th>
+                    <td > <h3  id="pm1_2pm"><%= pm_1_server %></h3> </td>
+                    <td> <h3>1pm - 2pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_1_server > 20) { %>
+  
+                    <tr id="pm1_2pm_tr"  class="danger" >
+                      <th scope="row">7</th>
+                      <td > <h3  id="pm1_2pm"><%= pm_1_server %></h3> </td>
+                      <td> <h3>1pm - 2pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="pm1_2pm_tr"  class="active" >
+                      <th scope="row">7</th>
+                      <td > <h3  id="pm1_2pm"><%= pm_1_server %></h3> </td>
+                      <td> <h3>1pm - 2pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+               
+              </tbody>
+
+              <!--2 pm-->
+              <tbody id="table_user_inStore">
+
+                
+                <% if (pm_2_server > 0 && pm_2_server <= 15) {  %>
+        
+                  <tr id="pm2_3pm_tr" class="success" >
+                    <th scope="row">1</th>
+                    <td > <h3  id="pm2_3pm"><%= pm_2_server %></h3> </td>
+                    <td> <h3>2pm - 3pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_2_server >= 16 && pm_2_server <= 21) { %>
+  
+                  <tr id="pm2_3pm_tr"  class="warning" >
+                    <th scope="row">1</th>
+                    <td > <h3  id="pm2_3pm"><%= pm_2_server %></h3> </td>
+                    <td> <h3>2pm - 3pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_2_server > 20) { %>
+  
+                    <tr id="pm2_3pm_tr"  class="danger" >
+                      <th scope="row">1</th>
+                      <td > <h3  id="pm2_3pm"><%= pm_2_server %></h3> </td>
+                      <td> <h3>2pm - 3pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="pm2_3pm_tr"  class="active" >
+                      <th scope="row">1</th>
+                      <td > <h3  id="pm2_3pm"><%= pm_2_server %></h3> </td>
+                      <td> <h3>2pm - 3pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+              </tbody>
+
+              <!--3 pm-->
+              <tbody id="table_user_inStore">
+
+                <% if (pm_3_server > 0 && pm_3_server <= 15) {  %>
+        
+                  <tr id="pm3_4pm_tr" class="success" >
+                    <th scope="row">8</th>
+                    <td > <h3  id="pm3_4pm"><%= pm_3_server %></h3> </td>
+                    <td> <h3>3pm - 4pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_3_server >= 16 && pm_3_server <= 20) { %>
+  
+                  <tr id="pm3_4pm_tr"  class="warning" >
+                    <th scope="row">8</th>
+                    <td > <h3  id="pm3_4pm"><%= pm_3_server %></h3> </td>
+                    <td> <h3>3pm - 4pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_3_server > 20) { %>
+  
+                    <tr id="pm3_4pm_tr"  class="danger" >
+                      <th scope="row">8</th>
+                      <td > <h3  id="pm3_4pm"><%= pm_3_server %></h3> </td>
+                      <td> <h3>3pm - 4pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="pm3_4pm_tr"  class="active" >
+                      <th scope="row">8</th>
+                      <td > <h3  id="pm3_4pm"><%= pm_3_server %></h3> </td>
+                      <td> <h3>3pm - 4pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+                
+              
+              </tbody>
+
+              <!--4 pm-->
+              <tbody id="table_user_inStore">
+
+                <% if (pm_4_server > 0 && pm_4_server <= 15) {  %>
+        
+                  <tr id="pm4_5pm_tr" class="success" >
+                    <th scope="row">9</th>
+                    <td > <h3  id="pm4_5pm"><%= pm_4_server %></h3> </td>
+                    <td> <h3>4pm - 5pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_4_server > 16 && pm_4_server <= 20) { %>
+  
+                  <tr id="pm4_5pm_tr"  class="warning" >
+                    <th scope="row">9</th>
+                    <td > <h3  id="pm4_5pm"><%= pm_4_server %></h3> </td>
+                    <td> <h3>4pm - 5pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_4_server > 20) { %>
+  
+                    <tr id="pm4_5pm_tr"  class="danger" >
+                      <th scope="row">9</th>
+                      <td > <h3  id="pm4_5pm"><%= pm_4_server %></h3> </td>
+                      <td> <h3>4pm - 5pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="pm4_5pm_tr"  class="active" >
+                      <th scope="row">9</th>
+                      <td > <h3  id="pm4_5pm"><%= pm_4_server %></h3> </td>
+                      <td> <h3>4pm - 5pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+              </tbody>
+
+
+              <!--5 pm-->
+              <tbody id="table_user_inStore">
+
+
+                <% if (pm_5_server > 0 && pm_5_server <= 15) {  %>
+        
+                  <tr id="pm5_6pm_tr" class="success" >
+                    <th scope="row">10</th>
+                    <td > <h3  id="pm5_6pm"><%= pm_5_server %></h3> </td>
+                    <td> <h3>5pm - 6pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_5_server > 16 && pm_5_server <= 20) { %>
+  
+                  <tr id="pm5_6pm_tr" class="warning" >
+                    <th scope="row">10</th>
+                    <td > <h3  id="pm5_6pm"><%= pm_5_server %></h3> </td>
+                    <td> <h3>5pm - 6pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_5_server > 20) { %>
+  
+                    <tr id="pm5_6pm_tr" class="danger" >
+                      <th scope="row">10</th>
+                      <td > <h3  id="pm5_6pm"><%= pm_5_server %></h3> </td>
+                      <td> <h3>5pm - 6pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="pm5_6pm_tr" class="active" >
+                      <th scope="row">10</th>
+                      <td > <h3  id="pm5_6pm"><%= pm_5_server %></h3> </td>
+                      <td> <h3>5pm - 6pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+              </tbody>
+
+              <!--6 pm-->
+              <tbody id="table_user_inStore">
+
+                <% if (pm_6_server > 0 && pm_6_server <= 15) {  %>
+        
+                  <tr id="pm6_7pm_tr" class="success" >
+                    <th scope="row">11</th>
+                    <td > <h3  id="pm6_7pm"><%= pm_6_server %></h3> </td>
+                    <td> <h3>6pm - 7pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_6_server > 16 && pm_6_server <= 20) { %>
+  
+                  <tr id="pm6_7pm_tr"  class="warning" >
+                    <th scope="row">11</th>
+                    <td > <h3  id="pm6_7pm"><%= pm_6_server %></h3> </td>
+                    <td> <h3>6pm - 7pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_6_server > 20) { %>
+  
+                    <tr id="pm6_7pm_tr"  class="danger" >
+                      <th scope="row">11</th>
+                      <td > <h3  id="pm6_7pm"><%= pm_6_server %></h3> </td>
+                      <td> <h3>6pm - 7pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="pm6_7pm_tr"  class="active" >
+                      <th scope="row">11</th>
+                      <td > <h3  id="pm6_7pm"><%= pm_6_server %></h3> </td>
+                      <td> <h3>6pm - 7pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+              </tbody>
+
+              <!--7 pm-->
+              <tbody id="table_user_inStore">
+
+                <% if (pm_7_server > 0 && pm_7_server <= 15) {  %>
+        
+                  <tr  id="pm7_8pm_tr" class="success" >
+                    <th scope="row">12</th>
+                    <td > <h3  id="pm7_8pm"><%= pm_7_server %></h3> </td>
+                    <td> <h3>7pm - 8pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_7_server > 16 && pm_7_server <= 20) { %>
+  
+                  <tr  id="pm7_8pm_tr"  class="warning" >
+                    <th scope="row">12</th>
+                    <td > <h3  id="pm7_8pm"><%= pm_7_server %></h3> </td>
+                    <td> <h3>7pm - 8pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_7_server > 20) { %>
+  
+                    <tr  id="pm7_8pm_tr"  class="danger" >
+                      <th scope="row">12</th>
+                      <td > <h3  id="pm7_8pm"><%= pm_7_server %></h3> </td>
+                      <td> <h3>7pm - 8pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr  id="pm7_8pm_tr"  class="active" >
+                      <th scope="row">12</th>
+                      <td > <h3  id="pm7_8pm"><%= pm_7_server %></h3> </td>
+                      <td> <h3>7pm - 8pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+              </tbody>
+
+              <!--8 pm-->
+              <tbody id="table_user_inStore">
+
+                <% if (pm_8_server > 0 && pm_8_server <= 15) {  %>
+        
+                  <tr  id="pm8_9pm_tr" class="success" >
+                    <th scope="row">13</th>
+                    <td > <h3  id="pm8_9pm"><%= pm_8_server %></h3> </td>
+                    <td> <h3>8pm - 9pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_8_server > 16 && pm_8_server <= 20) { %>
+  
+                  <tr  id="pm8_9pm_tr" class="warning" >
+                    <th scope="row">13</th>
+                    <td > <h3  id="pm8_9pm"><%= pm_8_server %></h3> </td>
+                    <td> <h3>8pm - 9pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_8_server > 20) { %>
+  
+                    <tr  id="pm8_9pm_tr" class="danger" >
+                      <th scope="row">13</th>
+                      <td > <h3  id="pm8_9pm"><%= pm_8_server %></h3> </td>
+                      <td> <h3>8pm - 9pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr id="pm8_9pm_tr" class="active" >
+                      <th scope="row">13</th>
+                      <td > <h3  id="pm8_9pm"><%= pm_8_server %></h3> </td>
+                      <td> <h3>8pm - 9pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+
+              </tbody>
+
+              <!--9 pm-->
+              <tbody id="table_user_inStore">
+
+                <% if (pm_9_server > 0 && pm_9_server <= 15) {  %>
+        
+                  <tr  id="pm9_10pm_tr" class="success" >
+                    <th scope="row">13</th>
+                    <td > <h3  id="pm9_10pm"><%= pm_9_server %></h3> </td>
+                    <td> <h3>9pm - 10pm</h3> </td>
+                  </tr>
+  
+                 <% } else if(pm_9_server > 16 && pm_9_server <= 20) { %>
+  
+                  <tr  id="pm9_10pm_tr"  class="warning" >
+                    <th scope="row">13</th>
+                    <td > <h3  id="pm9_10pm"><%= pm_9_server %></h3> </td>
+                    <td> <h3>9pm - 10pm</h3> </td>
+                  </tr>
+  
+                  <% } else if(pm_9_server > 20) { %>
+  
+                    <tr  id="pm9_10pm_tr"  class="danger" >
+                      <th scope="row">13</th>
+                      <td > <h3  id="pm9_10pm"><%= pm_9_server %></h3> </td>
+                      <td> <h3>9pm - 10pm</h3> </td>
+                    </tr>
+  
+                  <% } else { %>
+  
+                    <tr  id="pm9_10pm_tr"  class="active" >
+                      <th scope="row">13</th>
+                      <td > <h3  id="pm9_10pm"><%= pm_9_server %></h3> </td>
+                      <td> <h3>9pm - 10pm</h3> </td>
+                    </tr>
+  
+                    <% } %>
+
+
+              </tbody>
+            
+            </table>
+           
+           
+              <br>
+              <br>
+
+     <!-- chat js *********************************************************************** -->
+      <!-- <div class="container "> -->
+<!-- 
+        <div class="container">
+            <div class="row">
+              <div style="padding: 0; margin: 0;" class="col-lg-7 col-md-7 col-sm-6 col-xs-8">
+                <canvas id="myPie"></canvas>
+              </div>
+            </div>
+          </div>
+
+      
+
+          <div class="container">
+            <div class="row">
+              <div style="padding: 0; margin: 0;" class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                <canvas id="myBar"></canvas>
+              </div>
+            </div>
+          </div> -->
+        
+        <!-- </div> -->
+      <!-- end of js ************************************************************************* -->
+  
+
+     </div>
+
+
+    </div>
+    
+
+  <!-- Footer -->
+  <footer class="page-footer font-small blue">
+  
+    <!-- Copyright -->
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+      <a>DN Application Dalinnkulu11@gmail.com</a>
+    </div>
+    <!-- Copyright -->
+  
+  </footer>
+  <!-- Footer -->
+
+</div>
+
+
+
+  </div>
+
+  
+
+<script>
+    
+   var socket = io('http://localhost:9000');
+
+   socket.on("account_id", function(data){
+     console.log("account_id event: "+data)
+
+     socket.emit("account_id_validation_check", data)
+   })
+
+   //pm9_10pm_tr
+   
+   var am8_9am_tr = document.getElementById("am8_9am_tr")
+   var am9_10am_tr = document.getElementById("am9_10am_tr")
+   var am10_11am_tr = document.getElementById("am10_11am_tr")
+   var am11_12pm_tr = document.getElementById("am11_12pm_tr")
+   var pm12_1pm_tr = document.getElementById("pm12_1pm_tr")
+   var pm1_2pm_tr = document.getElementById("pm1_2pm_tr")
+   var pm2_3pm_tr = document.getElementById("pm2_3pm_tr")
+   var pm3_4pm_tr = document.getElementById("pm3_4pm_tr")
+   var pm4_5pm_tr = document.getElementById("pm4_5pm_tr")
+   var pm5_6pm_tr = document.getElementById("pm5_6pm_tr")
+   var pm6_7pm_tr = document.getElementById("pm6_7pm_tr")
+   var pm7_8pm_tr = document.getElementById("pm7_8pm_tr")
+   var pm8_9pm_tr = document.getElementById("pm8_9pm_tr")
+   var pm9_10pm_tr = document.getElementById("pm9_10pm_tr") 
+
+
+   var am8_9am_Dom = document.getElementById("am8_9am")
+   var am9_10am_Dom = document.getElementById("am9_10am")
+   var am10_11am_Dom = document.getElementById("am10_11am")
+   var am11_12pm_Dom = document.getElementById("am11_12pm")
+   var pm12_1pm_Dom = document.getElementById("pm12_1pm")
+   var pm1_2pm_Dom = document.getElementById("pm1_2pm")
+   var pm2_3pm_Dom = document.getElementById("pm2_3pm")
+   var pm3_4pm_Dom = document.getElementById("pm3_4pm")
+   var pm3_4pm_Dom = document.getElementById("pm3_4pm")
+   var pm4_5pm_Dom = document.getElementById("pm4_5pm")
+   var pm5_6pm_Dom = document.getElementById("pm5_6pm")
+   var pm6_7pm_Dom = document.getElementById("pm6_7pm")
+   var pm7_8pm_Dom = document.getElementById("pm7_8pm")
+   var pm8_9pm_Dom = document.getElementById("pm8_9pm")
+   var pm9_10pm_Dom = document.getElementById("pm9_10pm") 
+
+//user_label
+var add_user_button = document.getElementById("add_user")
+var label_user = document.getElementById("user_label")
+var out_user_label = document.getElementById("out_user_label")
+var update_charts = document.getElementById("update_charts") // panel_button_update_charts
+var info_update_charts = document.getElementById("info_update_charts")
+var info_heading_update_charts = document.getElementById("info_heading_update_charts")
+var panel_button_update_charts = document.getElementById("panel_button_update_charts")
+var loading_update_charts = document.getElementById("loading_update_charts")
+
+// add_user_button.addEventListener("click", () => {
+//     socket.emit("add_this_user", {msg: "client want to add", num: 1})
+// })
+
+socket.on('new_customer', function(data){
+  console.log("858 data.new_customer: "+data.new_customer)
+  update_charts.style.display = "none"
+  info_update_charts.style.display = "block"
+  info_heading_update_charts.innerHTML = data.new_customer + "+ new customers in"
+  info_update_charts.style.display = data.shower
+})
+
+update_charts.addEventListener('click', ()=>{
+  update_charts.style.display = "none"
+  info_update_charts.style.display = "none"
+ loading_update_charts.style.display = "block"
+socket.emit("add_this_user", "update chart")
+})
+
+panel_button_update_charts.addEventListener('click', ()=>{
+  info_update_charts.style.display = "none"
+ loading_update_charts.style.display = "block"
+socket.emit("add_this_user", "update chart")
+})
+
+socket.on("updated_count", function(data){
+    label_user.innerHTML = data + " Customers in"
+})
+
+socket.on("out_user_updated", function(data){
+  out_user_label.innerHTML = data + " Customers out"
+})
+
+// determine red, blue, green according to the amount of users
+socket.on('user_by_hour', function(data){
+  console.log('user_by_hour event happen')
+  update_charts.style.display = "block"
+  loading_update_charts.style.display = "none"
+  am8_9am_Dom.innerHTML = data.am8_9am_server 
+ am9_10am_Dom.innerHTML = data.am9_10am_server 
+  am10_11am_Dom.innerHTML = data.am10_11am_server
+  am11_12pm_Dom.innerHTML = data.am11_12pm_server
+
+  console.log("data.pm12_1pm_server: "+data.pm12_1pm_server)
+  console.log("data.pm9_10pm_server: "+data.pm9_10pm_server)
+  pm12_1pm_Dom.innerHTML = data.pm12_1pm_server 
+  pm1_2pm_Dom.innerHTML = data.pm1_2pm_server  
+  pm2_3pm_Dom.innerHTML = data.pm2_3pm_server 
+  pm3_4pm_Dom.innerHTML = data.pm3_4pm_server 
+  pm4_5pm_Dom.innerHTML = data.pm4_5pm_server
+  pm5_6pm_Dom.innerHTML = data.pm5_6pm_server 
+  pm6_7pm_Dom.innerHTML = data.pm6_7pm_server
+  pm7_8pm_Dom.innerHTML = data.pm7_8pm_server 
+  pm8_9pm_Dom.innerHTML = data.pm8_9pm_server
+  pm9_10pm_Dom.innerHTML = data.pm9_10pm_server
+
+  console.log("data.pm5_6pm_server: "+data.pm5_6pm_server)
+  if (data.pm5_6pm_server > 0 && data.pm5_6pm_server <= 15) {
+    console.log("green")
+    pm5_6pm_tr.setAttribute("class", "success")
+  } else if (data.pm5_6pm_server >= 16 && data.pm5_6pm_server <= 20) {
+    console.log("yellow")
+    pm5_6pm_tr.setAttribute("class", "warning")
+  } else if (data.pm5_6pm_server > 20 ) {
+    console.log("red")
+    pm5_6pm_tr.setAttribute("class", "danger")
+  }else {
+    console.log("grey")
+    pm5_6pm_tr.setAttribute("class", "active")
+  }
+
+        green_yello_red_class(data.am8_9am_server, am8_9am_tr)
+        green_yello_red_class(data.am9_10am_server , am9_10am_tr)
+        green_yello_red_class(data.am10_11am_server, am10_11am_tr)
+        green_yello_red_class(data.am11_12pm_server, am11_12pm_tr)
+        green_yello_red_class(data.pm12_1pm_server , pm12_1pm_tr)
+        green_yello_red_class(data.pm1_2pm_server , pm1_2pm_tr)
+        green_yello_red_class(data.pm2_3pm_server, pm2_3pm_tr)
+        green_yello_red_class(data.pm3_4pm_server, pm3_4pm_tr)
+        green_yello_red_class(data.pm4_5pm_server, pm4_5pm_tr)
+        green_yello_red_class(data.pm5_6pm_server, pm5_6pm_tr)
+        green_yello_red_class(data.pm6_7pm_server, pm6_7pm_tr) 
+        green_yello_red_class(data.pm7_8pm_server, pm7_8pm_tr)
+        green_yello_red_class(data.pm8_9pm_server, pm8_9pm_tr)
+        green_yello_red_class(data.pm9_10pm_server, pm9_10pm_tr)
+
+       
+
+  //****************************************************************************
+// my chart socket
+let myChart = document.getElementById('myChart').getContext('2d');
+
+// Global Options
+Chart.defaults.global.defaultFontFamily = 'Lato';
+Chart.defaults.global.defaultFontSize = 18;
+Chart.defaults.global.defaultFontColor = '#777';
+
+let massPopChart = new Chart(myChart, {
+  type:'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+  data:{
+    labels:['8am', '9am', '10am', '11am', '12pm',
+     '1pm', '2pm', '3pm', '4pm', '5pm','6pm', '7pm', '8pm', '9pm'],
+    datasets:[{
+      label:'Customers',
+      data:[
+      data.am8_9am_server,data.am9_10am_server,data.am10_11am_server,
+      data.am11_12pm_server,data.pm12_1pm_server,data.pm1_2pm_server ,
+      data.pm2_3pm_server,data.pm3_4pm_server,data.pm4_5pm_server,
+      data.pm5_6pm_server,data.pm6_7pm_server, data.pm7_8pm_server ,
+      data.pm8_9pm_server,data.pm9_10pm_server
+      ],
+      //backgroundColor:'green',
+      backgroundColor:[
+      'rgba(0,0,255,0.3)'
+        // 'rgba(255, 99, 132, 0.6)'
+        // 'rgba(54, 162, 235, 0.6)',
+        // 'rgba(255, 206, 86, 0.6)',
+        // 'rgba(75, 192, 192, 0.6)',
+        // 'rgba(153, 102, 255, 0.6)',
+        // 'rgba(255, 159, 64, 0.6)',
+        // 'rgba(255, 99, 132, 0.6)'
+      ],
+      borderWidth:1,
+      borderColor:'#777',
+      hoverBorderWidth:3,
+      hoverBorderColor:'#000'
+    }]
+  },
+  options:{
+    title:{
+      display:true,
+      text: data.date_today,
+      fontSize:25
+    },
+    legend:{
+      display:true,
+      position:'right',
+      labels:{
+        fontColor:'#000'
+      }
+    },
+    layout:{
+      padding:{
+        left:50,
+        right:0,
+        bottom:0,
+        top:0
+      }
+    },
+    tooltips:{
+      enabled:true
+    }
+  }
+});
+
+//****************************************************************************
+
+})
+
+
+
+// bar chart socket
+socket.on('customer_by_day', function(data){
+  console.log("today: "+data.today)
+  console.log("yesterday: "+data.yesterday)
+  console.log("_2day_ago: "+data._2day_ago)
+  console.log("_3day_ago: "+data._3day_ago)
+  console.log("_4day_ago: "+data._4day_ago)
+  console.log("_5day_ago: "+data._5day_ago)
+
+  
+
+let myBar = document.getElementById('myBar').getContext('2d');
+
+// Global Options
+Chart.defaults.global.defaultFontFamily = 'Lato';
+Chart.defaults.global.defaultFontSize = 18;
+Chart.defaults.global.defaultFontColor = '#777';
+
+let massPop_myBar = new Chart(myBar, {
+  type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+  data:{
+    //Monday, Tuesday, Wednesday, Thursday, and Friday; while Saturday and Sunday
+    labels:[data._6day_label,data._5day_label,
+            data._4day_label,data._3day_label,
+            data._2day_label,data.yesterday_label, 
+            data.today_label],
+    datasets:[{
+      label:'Users',
+      data:[
+      data._6day_ago,
+      data._5day_ago,
+      data._4day_ago,
+      data._3day_ago,
+      data._2day_ago,
+      data.yesterday,
+      data.today
+      ],
+      //backgroundColor:'green',
+      backgroundColor:[
+        'rgba(255, 99, 132, 0.6)',
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 206, 86, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(153, 102, 255, 0.6)',
+        'rgba(255, 159, 64, 0.6)',
+        'rgba(255, 99, 132, 0.6)'
+      ],
+      borderWidth:1,
+      borderColor:'#777',
+      hoverBorderWidth:3,
+      hoverBorderColor:'#000'
+    }]
+  },
+  options:{
+    title:{
+      display:true,
+      text: "Customer in: "+data.end_date+' - '+data.start_date,
+      fontSize:25
+    },
+    legend:{
+      display:true,
+      position:'right',
+      labels:{
+        fontColor:'#000'
+      }
+    },
+    layout:{
+      padding:{
+        left:50,
+        right:0,
+        bottom:0,
+        top:0
+      }
+    },
+    tooltips:{
+      enabled:true
+    }
+  }
+});
+
+//****************************************************************************
+
+})
+
+
+
+ 
+// bar chart ejs
+let myBar = document.getElementById('myBar').getContext('2d');
+
+// Global Options
+Chart.defaults.global.defaultFontFamily = 'Lato';
+Chart.defaults.global.defaultFontSize = 18;
+Chart.defaults.global.defaultFontColor = '#777';
+
+let massPop_myBar = new Chart(myBar, {
+  type:'bar', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+  data:{
+    //Monday, Tuesday, Wednesday, Thursday, and Friday; while Saturday and Sunday
+    labels:["<%= day_6_ago_label %>","<%= day_5_ago_label %>"
+    , "<%= day_4_ago_label %>", "<%= day_3_ago_label %>",
+     "<%= day_2_ago_label %>", "<%= day_1_ago_label %>",
+     "<%= day_7_ago_label %>"],
+    datasets:[{
+      label: "Customers",
+      data:[
+      "<%= saturday_server %>",
+      "<%= sunday_server %>",
+      "<%= monday_server %>",
+      "<%= tuesday_server %>",
+      "<%= wednesday_server %>",
+      "<%= thurday_server %>",
+      "<%= friday_server %>"      
+      ],
+      //backgroundColor:'green',
+      backgroundColor:[
+        'rgba(255, 99, 132, 0.6)',
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 206, 86, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(153, 102, 255, 0.6)',
+        'rgba(255, 159, 64, 0.6)',
+        'rgba(255, 99, 132, 0.6)'
+      ],
+      borderWidth:1,
+      borderColor:'#777',
+      hoverBorderWidth:3,
+      hoverBorderColor:'#000'
+    }]
+  },
+  options:{
+    title:{
+      display:true,
+      text: "Customer in: "+"<%= end_date_server %>"+' - '+"<%= start_date_server %>",
+      fontSize:25
+    },
+    legend:{
+      display:true,
+      position:'right',
+      labels:{
+        fontColor:'#000'
+      }
+    },
+    layout:{
+      padding:{
+        left:50,
+        right:0,
+        bottom:0,
+        top:0
+      }
+    },
+    tooltips:{
+      enabled:true
+    }
+  }
+});
+
+//****************************************************************************
+
+
+
+
+
+
+
+        function green_yello_red_class(by_hour, hour_tr) {
+                  if (by_hour > 0 && by_hour <= 15) {
+                  console.log("green")
+                  hour_tr.setAttribute("class", "success")
+                } else if (by_hour >= 16 && by_hour <= 20) {
+                  console.log("yellow")
+                  hour_tr.setAttribute("class", "warning")
+                } else if (by_hour > 20 ) {
+                  console.log("red")
+                  hour_tr.setAttribute("class", "danger")
+                }else {
+                  console.log("grey")
+                  hour_tr.setAttribute("class", "active")
+                }
+                }
+
+   //****************************************************************************
+
+   // myChart ejs
+   let myChart = document.getElementById('myChart').getContext('2d');
+
+// Global Options
+Chart.defaults.global.defaultFontFamily = 'Lato';
+Chart.defaults.global.defaultFontSize = 18;
+Chart.defaults.global.defaultFontColor = '#777';
+
+let massPopChart = new Chart(myChart, {
+  type:'line', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+  data:{
+    labels:['8am', '9am', '10am', '11am', '12pm',
+     '1pm', '2pm', '3pm', '4pm', '5pm','6pm', '7pm', '8pm', '9pm'],
+    datasets:[{
+      label:'Customers',
+      data:[
+      "<%= am_8_server %>","<%= am_9_server %>","<%= am_10_server %>",
+      "<%= am_11_server %>","<%= pm_12_server %>","<%= pm_1_server %>" ,
+      "<%= pm_2_server %>","<%= pm_3_server %>","<%= pm_4_server %>",
+      "<%= pm_5_server %>","<%= pm_6_server %>","<%= pm_7_server %>" ,
+      "<%= pm_8_server %>", "<%= pm_9_server %>"
+      ],
+      //backgroundColor:'green',
+      backgroundColor:[
+      'rgba(0,0,255,0.3)'
+        // 'rgba(255, 99, 132, 0.6)',
+        // 'rgba(54, 162, 235, 0.6)',
+        // 'rgba(255, 206, 86, 0.6)',
+        // 'rgba(75, 192, 192, 0.6)',
+        // 'rgba(153, 102, 255, 0.6)',
+        // 'rgba(255, 159, 64, 0.6)',
+        // 'rgba(255, 99, 132, 0.6)'
+      ],
+      borderWidth:1,
+      borderColor:'#777',
+      hoverBorderWidth:3,
+      hoverBorderColor:'#000'
+    }]
+  },
+  options:{
+    title:{
+      display:true,
+      text: "Customer in: "+"<%= start_date_server %>",
+      fontSize:25
+    },
+    legend:{
+      display:true,
+      position:'right',
+      labels:{
+        fontColor:'#000'
+      }
+    },
+    layout:{
+      padding:{
+        left:50,
+        right:0,
+        bottom:0,
+        top:0
+      }
+    },
+    tooltips:{
+      enabled:true
+    }
+  }
+});
+
+//****************************************************************************
+
+
+
+
+  
+
+// let myPie = document.getElementById('myPie').getContext('2d');
+
+// // Global Options
+// Chart.defaults.global.defaultFontFamily = 'Lato';
+// Chart.defaults.global.defaultFontSize = 18;
+// Chart.defaults.global.defaultFontColor = '#777';
+
+// let massPop_myPie = new Chart(myPie, {
+//   type:'pie', // bar, horizontalBar, pie, line, doughnut, radar, polarArea
+//   data:{
+//     labels:['15 min', '30 min', '45 min', '60 min', '75 min', '90 min'],
+//     datasets:[{
+//       label:'Users',
+//       data:[
+//         3,
+//         7,
+//         19,
+//         23,
+//         11,
+//         35
+//       ],
+//       //backgroundColor:'green',
+//       backgroundColor:[
+//         'rgba(255, 99, 132, 0.6)',
+//         'rgba(54, 162, 235, 0.6)',
+//         'rgba(255, 206, 86, 0.6)',
+//         'rgba(75, 192, 192, 0.6)',
+//         'rgba(153, 102, 255, 0.6)',
+//         'rgba(255, 159, 64, 0.6)',
+//         'rgba(255, 99, 132, 0.6)'
+//       ],
+//       borderWidth:1,
+//       borderColor:'#777',
+//       hoverBorderWidth:3,
+//       hoverBorderColor:'#000'
+//     }]
+//   },
+//   options:{
+//     title:{
+//       display:true,
+//       text:'Users summary',
+//       fontSize:25
+//     },
+//     legend:{
+//       display:true,
+//       position:'right',
+//       labels:{
+//         fontColor:'#000'
+//       }
+//     },
+//     layout:{
+//       padding:{
+//         left:50,
+//         right:0,
+//         bottom:0,
+//         top:0
+//       }
+//     },
+//     tooltips:{
+//       enabled:true
+//     }
+//   }
+// });
+
+//****************************************************************************
+    
+  </script>
+  
+
+
+</body>
+</html>
