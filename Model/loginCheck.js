@@ -2,11 +2,6 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
 const jwt = require("jsonwebtoken")
 
-mongoose.connect('mongodb://127.0.0.1:27017/Customer_count', {
-    useNewUrlParser: true,
-    useCreateIndex:true,
-    useUnifiedTopology:true
-})
 
 const loginCheck_schema = new mongoose.Schema({
       // key and values declaration

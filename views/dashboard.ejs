@@ -821,7 +821,8 @@
 
 <script>
     
-   var socket = io('http://localhost:9000');
+  //var socket = io('http://localhost: 9000');
+  var socket = io('/');
 
    socket.on("account_id", function(data){
      console.log("account_id event: "+data)
